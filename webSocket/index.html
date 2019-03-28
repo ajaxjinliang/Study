@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- <script src="http://localhost:8080/socket.io/socket.io.js" charset="UTF-8"></script> -->
+  <script>
+    // let sock = io.connect("ws://localhost:8080/");
+    // sock.emit("aaa", 5, 10);
+    // sock.on("timer", function(time){
+      //   console.log(time);
+      // })
+      // sock.emit
+      // sock.on
+    // 原生WebSocket
+    let ws = new WebSocket("ws://localhost:8080/");
+    // 建立链接(交换数据)
+    ws.onopen = function () {
+      alert("连接建立");
+    };
+    ws.onmessage = function () {};
+    // 链接关闭
+    ws.onclose = function () {};
+    ws.onerror = function () {};
+  </script>
+</head>
+<body>
+  
+</body>
+</html>

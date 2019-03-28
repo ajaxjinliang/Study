@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="div1">
+    <input type="text" v-model="name" /><br/>
+    姓名：{{name}}<br/>
+    年龄：{{age}}
+  </div>
+</body>
+<script>
+  // 拿取dom节点
+  let el = document.getElementById("div1");
+  // 保存模板
+  let template = el.innerHTML;
+  // 初始化数据
+  let _data = {
+    name: "blue",
+    age: 19
+  }
+  // Proxy代理（_data参数是拦截的目标对象，另一个对象是用来定制拦截行为）
+  let proxy = new Proxy(_data, {
+    // 设置proxy的数据会触发该事件
+    set(obj, name, value) {
+      console.log(3);
+      obj[name] = value;
+      // 数据发送改变重新渲染
+      render();
+    }
+  })
+  // 初始化渲染
+  render();
+  // 渲染函数
+  function render() {
+    console.log(2);
+    el.innerHTML = template.replace(/\{\{\w+\}\}/g, str=>{
+      str = str.substring(2, str.length-2);
+      return _data[str];
+    });
+
+    // 数据同步到视图
+    Array.from(el.getElementsByTagName("input"))
+      .filter(ele => ele.getAttribute("v-model"))
+      .forEach(input => {
+        let name = input.getAttribute("v-model");
+        input.value = _data[name];
+        // 视图同步到数据
+        input.oninput = function() {
+          console.log(1);
+          proxy[name] = input.value;
+        }
+        input.focus();
+      });
+  }
+  
+</script>
+</html>
